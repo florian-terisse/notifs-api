@@ -15,6 +15,7 @@ public class ReplacementUtils {
         replacements.put("CA VSAV", "chef d'agrès VSAV");
         replacements.put("Depart", "Départ");
         replacements.put("TERISSE", "TÉRISSE");
+        replacements.put("SAP REG", "Secours à personne - Régulation -");
     }
 
     public String makeReplacements(String message) {
