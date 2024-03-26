@@ -1,4 +1,4 @@
-package fr.terisse.api.notifsapi;
+package fr.terisse.api.notifsapi.filters;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

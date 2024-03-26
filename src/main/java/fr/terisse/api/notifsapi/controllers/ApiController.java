@@ -2,11 +2,9 @@ package fr.terisse.api.notifsapi.controllers;
 
 import fr.terisse.api.notifsapi.beans.Notif;
 import fr.terisse.api.notifsapi.utils.AudioUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Slf4j
 @RequestMapping("/notifsapi")
 public class ApiController {
 
@@ -18,8 +16,12 @@ public class ApiController {
     }
 
     @GetMapping("/afficher/{message}")
-    public void  afficher(@PathVariable("message") String message) {
-        log.info(message);
-       // AudioUtils.alerte("Mot 1 Mot 2 Mot 3");
+    public void  afficherPathMessage(@PathVariable("message") String message) {
+        AudioUtils.alerte(message);
+    }
+
+    @GetMapping("/afficher")
+    public void  afficherRequestMessage(@RequestParam("message") String message) {
+        AudioUtils.alerte(message);
     }
 }
