@@ -1,4 +1,4 @@
-package fr.terisse.api.notifsapi;
+package fr.terisse.api.notifsapi.beans;
 
 import lombok.Builder;
 import lombok.Getter;
