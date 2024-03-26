@@ -34,7 +34,7 @@ public class ClipUtils {
     void sirene() throws UnsupportedAudioFileException, IOException, LineUnavailableException, InterruptedException {
         if (lastMessage == null || ChronoUnit.MINUTES.between(lastMessage, LocalDateTime.now()) > 0) {
             read(new ByteArrayInputStream(sireneSong));
-        };
+        }
     }
 
     private void read(InputStream stream) throws UnsupportedAudioFileException, IOException, LineUnavailableException, InterruptedException {

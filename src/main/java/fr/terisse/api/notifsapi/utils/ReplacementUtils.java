@@ -8,7 +8,7 @@ import java.util.Map;
 @UtilityClass
 public class ReplacementUtils {
 
-    Map<String, String> replacements = new HashMap<>();
+    final Map<String, String> replacements = new HashMap<>();
 
     static {
         replacements.put("COND VSAV", "conducteur VSAV");
