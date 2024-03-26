@@ -11,7 +11,7 @@ public class ApiController {
     @PostMapping("/afficher")
     public void  afficher(@RequestBody Notif notif) {
         if ("mySTART+".equals(notif.getAppName())) {
-            AudioUtils.alerte(notif.getNotificationTitle() + " " + notif.getNotificationMessage());
+            AudioUtils.alerte(notif.getNotificationTitle() + ". " + notif.getNotificationMessage());
         }
     }
 

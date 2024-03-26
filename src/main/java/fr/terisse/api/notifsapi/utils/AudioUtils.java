@@ -19,8 +19,8 @@ public class AudioUtils {
 
         executorService.execute(() -> {
             try {
-                ClipUtils.sirene();
-                ClipUtils.read(TextToSpeechUtils.toSpeech(message));
+               // ClipUtils.sirene();
+                ClipUtils.read(TextToSpeechUtils.toSpeech(ReplacementUtils.makeReplacements(message)));
             } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | InterruptedException e) {
                 throw new RuntimeException(e);
             }

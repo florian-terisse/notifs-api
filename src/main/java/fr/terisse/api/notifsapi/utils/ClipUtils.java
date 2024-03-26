@@ -6,13 +6,15 @@ import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 
 @UtilityClass
 public class ClipUtils {
 
-    private static ClipUtils instance;
+    private LocalDateTime lastMessage;
 
     private final byte[] sireneSong;
 
@@ -30,7 +32,9 @@ public class ClipUtils {
     }
 
     void sirene() throws UnsupportedAudioFileException, IOException, LineUnavailableException, InterruptedException {
-        read(new ByteArrayInputStream(sireneSong));
+        if (lastMessage == null || ChronoUnit.MINUTES.between(lastMessage, LocalDateTime.now()) > 0) {
+            read(new ByteArrayInputStream(sireneSong));
+        };
     }
 
     private void read(InputStream stream) throws UnsupportedAudioFileException, IOException, LineUnavailableException, InterruptedException {
@@ -54,5 +58,6 @@ public class ClipUtils {
 
         clip.start();
         syncLatch.await();
+        lastMessage = LocalDateTime.now();
     }
 }
