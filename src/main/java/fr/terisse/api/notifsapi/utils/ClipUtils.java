@@ -18,7 +18,14 @@ public class ClipUtils {
 
     private final byte[] sireneSong;
 
+    private final Clip clip;
+
     static {
+        try {
+            clip = AudioSystem.getClip();
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException(e);
+        }
         try {
             sireneSong = Objects.requireNonNull(ClipUtils.class.getClassLoader()
                     .getResourceAsStream("sirene.wav")).readAllBytes();
@@ -42,9 +49,6 @@ public class ClipUtils {
         // create AudioInputStream object
         AudioInputStream audioInputStream =
                 AudioSystem.getAudioInputStream(stream);
-
-        // create clip reference
-        Clip clip = AudioSystem.getClip();
 
         // open audioInputStream to the clip
         clip.open(audioInputStream);
