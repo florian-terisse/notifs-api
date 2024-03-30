@@ -9,7 +9,7 @@ import java.io.IOException;
 @Service
 public class CalendarSchedulerService {
 
-    @Scheduled(fixedDelay = 3600000)
+    @Scheduled(fixedDelay = 300000)
     public void majCalendar() throws IOException {
         CalendarUtils.getEvents().forEach(EventTimer::new);
     }
