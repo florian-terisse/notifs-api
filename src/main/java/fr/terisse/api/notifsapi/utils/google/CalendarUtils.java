@@ -104,6 +104,8 @@ public class CalendarUtils {
     private Evenement getEvenement(Event event) {
         Evenement lReturn = new Evenement();
 
+        lReturn.setId(event.getId());
+
         DateTime start = event.getStart().getDateTime();
         if (start == null) {
             start = event.getStart().getDate();

@@ -8,6 +8,7 @@ import java.util.Date;
 @Data
 public class Evenement {
 
+    String id;
     Date debut;
     Date fin;
     NotifTypeEnum type;
