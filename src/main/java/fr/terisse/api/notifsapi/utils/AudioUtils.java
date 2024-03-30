@@ -1,27 +1,26 @@
 package fr.terisse.api.notifsapi.utils;
 
+import fr.terisse.api.notifsapi.beans.Evenement;
+import fr.terisse.api.notifsapi.utils.clip.ClipUtils;
+import fr.terisse.api.notifsapi.utils.google.TextToSpeechUtils;
 import lombok.experimental.UtilityClass;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @UtilityClass
 public class AudioUtils {
 
-    final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    public void alerte(String message)  {
+    private LocalDateTime lastMessage;
 
-        executorService.execute(() -> {
-            try {
-                ClipUtils.sirene();
-                ClipUtils.read(TextToSpeechUtils.toSpeech(ReplacementUtils.makeReplacements(message)));
-            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
+    public void alerte(Evenement evenement) {
+        if (lastMessage == null || ChronoUnit.MINUTES.between(lastMessage, LocalDateTime.now()) > 0) {
+            ClipUtils.play(evenement.getType().getSong());
+        }
+
+        ClipUtils.play(TextToSpeechUtils.toSpeech(ReplacementUtils.makeReplacements(evenement.getTitre())));
+
+        lastMessage = LocalDateTime.now();
     }
 }

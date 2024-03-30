@@ -1,4 +1,4 @@
-package fr.terisse.api.notifsapi.utils;
+package fr.terisse.api.notifsapi.utils.google;
 
 import com.google.cloud.texttospeech.v1.*;
 import com.google.protobuf.ByteString;
@@ -26,7 +26,7 @@ public class TextToSpeechUtils {
         }
     }
 
-    byte[] toSpeech(String message)  {
+    public byte[] toSpeech(String message)  {
         SynthesisInput input = SynthesisInput.newBuilder().setText(message).build();
 
         // audio file type

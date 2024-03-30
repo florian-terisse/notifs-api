@@ -1,4 +1,4 @@
-package fr.terisse.api.notifsapi.utils;
+package fr.terisse.api.notifsapi.utils.google;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -14,8 +14,10 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.Events;
+import fr.terisse.api.notifsapi.beans.Evenement;
+import fr.terisse.api.notifsapi.enums.NotifTypeEnum;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,14 +25,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /* class to demonstrate use of Calendar events list API */
 @UtilityClass
+@Slf4j
 public class CalendarUtils {
     /**
      * Application name.
      */
-    private final String APPLICATION_NAME = "Google Calendar API Java Quickstart";
+    private final String APPLICATION_NAME = "Raspberry calendar";
     /**
      * Global instance of the JSON factory.
      */
@@ -48,14 +52,12 @@ public class CalendarUtils {
             Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
     private final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
-    final NetHttpTransport HTTP_TRANSPORT;
 
     Calendar service;
 
     static {
         try {
-            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-
+            NetHttpTransport netHttpTransport = GoogleNetHttpTransport.newTrustedTransport();
 
             // Load client secrets.
             InputStream in = Calendar.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
@@ -67,7 +69,7 @@ public class CalendarUtils {
 
             // Build flow and trigger user authorization request.
             GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                    HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+                    netHttpTransport, JSON_FACTORY, clientSecrets, SCOPES)
                     .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                     .setAccessType("offline")
                     .build();
@@ -77,7 +79,7 @@ public class CalendarUtils {
 
 
             service =
-                    new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+                    new Calendar.Builder(netHttpTransport, JSON_FACTORY, credential)
                             .setApplicationName(APPLICATION_NAME)
                             .build();
         } catch (GeneralSecurityException | IOException e) {
@@ -85,48 +87,40 @@ public class CalendarUtils {
         }
     }
 
-    public static void getEvents() throws IOException {
-        // List the next 10 events from the primary calendar.
-        DateTime now = new DateTime(System.currentTimeMillis());
+    public List<Evenement> getEvents() throws IOException {
 
-        // Build a new authorized API client service.
-
-        Events events = service.events().list("9d6b192218693bccfa1cc636157a315c6c937225734e23c0e5f0bb009eabeca9@group.calendar.google.com")
+        return service.events().list("9d6b192218693bccfa1cc636157a315c6c937225734e23c0e5f0bb009eabeca9@group.calendar.google.com")
                 .setMaxResults(10)
-                .setTimeMin(now)
+                .setTimeMin(new DateTime(System.currentTimeMillis()))
                 .setOrderBy("startTime")
                 .setSingleEvents(true)
-                .execute();
-        List<Event> items = events.getItems();
-        if (items.isEmpty()) {
-            System.out.println("No upcoming events found.");
-        } else {
-            System.out.println("Upcoming events");
-            for (Event event : items) {
-                DateTime start = event.getStart().getDateTime();
-                if (start == null) {
-                    start = event.getStart().getDate();
-                }
-                System.out.printf("%s (%s)\n", event.getSummary(), start);
-
-                Timer timer = new Timer();
-                timer.schedule(new TimeTask(event), new Date(start.getValue()));
-            }
-        }
+                .execute()
+                .getItems()
+                .stream()
+                .map(CalendarUtils::getEvenement)
+                .collect(Collectors.toList());
     }
 
-    public class TimeTask extends TimerTask {
+    private Evenement getEvenement(Event event) {
+        Evenement lReturn = new Evenement();
 
-        Event leEvent;
-        public TimeTask(Event event) {
-            leEvent = event;
+        DateTime start = event.getStart().getDateTime();
+        if (start == null) {
+            start = event.getStart().getDate();
         }
+        lReturn.setDebut(new Date(start.getValue()));
 
-        @Override
-        public void run() {
-            System.out.printf("%s (%s)\n", leEvent.getSummary(), "C'est l'heure de " + leEvent.getSummary());
-
-
+        DateTime end = event.getEnd().getDateTime();
+        if (end == null) {
+            end = event.getEnd().getDate();
         }
+        lReturn.setFin(new Date(end.getValue()));
+
+        lReturn.setTitre(event.getSummary());
+
+        lReturn.setType(NotifTypeEnum.EVENEMENT);
+
+        return lReturn;
+
     }
 }
