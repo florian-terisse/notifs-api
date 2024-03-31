@@ -3,24 +3,14 @@ package fr.terisse.api.notifsapi.schedulers;
 import fr.terisse.api.notifsapi.beans.Evenement;
 import fr.terisse.api.notifsapi.utils.AudioUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class EventTimer extends Timer {
 
-    private static final Map<String, EventTimer> events = new HashMap<>();
+    private static final Set<EventTimer> events = new HashSet<>();
 
     EventTimer(Evenement event) {
-        String id = event.getId();
-
-        if (id != null) {
-            if (events.containsKey(id)) {
-                events.get(id).cancel();
-            }
-            events.put(id, this);
-        }
+        events.add(this);
 
         this.schedule(new EventTask(event), event.getDebut());
     }
@@ -36,5 +26,10 @@ public class EventTimer extends Timer {
         public void run() {
             AudioUtils.alerte(leEvent);
         }
+    }
+
+    public static void purger() {
+        events.forEach(Timer::cancel);
+        events.clear();
     }
 }

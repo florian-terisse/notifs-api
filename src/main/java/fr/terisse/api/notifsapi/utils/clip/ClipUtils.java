@@ -52,6 +52,8 @@ public class ClipUtils {
                 syncLatch.await();
             } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | InterruptedException e) {
                 throw new RuntimeException(e);
+            } finally {
+                clip.close();
             }
         });
     }

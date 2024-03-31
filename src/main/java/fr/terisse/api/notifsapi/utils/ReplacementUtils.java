@@ -12,10 +12,14 @@ public class ReplacementUtils {
 
     static {
         replacements.put("COND VSAV", "conducteur VSAV");
+        replacements.put("COND FPT", "conducteur FPT");
         replacements.put("CA VSAV", "chef d'agrès VSAV");
+        replacements.put("CA FPT", "chef d'agrès VSAV");
+        replacements.put("CE FPT", "chef d'équipe FPT");
         replacements.put("Depart", "Départ");
         replacements.put("TERISSE", "TÉRISSE");
         replacements.put("SAP REG", "Secours à personne - Régulation -");
+        replacements.put("FEU D HABITATION INDIVIDUELLE", "Feu d'habitation individuelle");
     }
 
     public String makeReplacements(String message) {

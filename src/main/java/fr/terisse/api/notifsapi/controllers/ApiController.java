@@ -4,6 +4,7 @@ import fr.terisse.api.notifsapi.beans.Evenement;
 import fr.terisse.api.notifsapi.beans.Notif;
 import fr.terisse.api.notifsapi.enums.NotifTypeEnum;
 import fr.terisse.api.notifsapi.utils.AudioUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,11 +14,18 @@ public class ApiController {
     @PostMapping("/afficher")
     public void  afficher(@RequestBody Notif notif) {
         if ("mySTART+".equals(notif.getAppName())) {
-            Evenement alerte = new Evenement();
-            alerte.setType(NotifTypeEnum.ALERTE);
-            alerte.setTitre(notif.getNotificationTitle() + ". " + notif.getNotificationMessage());
 
-            AudioUtils.alerte(alerte);
+            if (StringUtils.isNotBlank(notif.getNotificationTitle())  && StringUtils.isNotBlank(notif.getNotificationMessage())) {
+
+                String message = notif.getNotificationTitle() + ". " + notif.getNotificationMessage();
+
+                Evenement alerte = new Evenement();
+                alerte.setType(NotifTypeEnum.ALERTE);
+                alerte.setTitre(message);
+
+                AudioUtils.alerte(alerte);
+
+            }
         }
     }
 
