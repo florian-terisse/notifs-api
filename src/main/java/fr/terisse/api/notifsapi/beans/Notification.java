@@ -1,15 +1,18 @@
 package fr.terisse.api.notifsapi.beans;
 
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
+import java.util.Date;
+
 @Builder
-@Getter
+@Data
 @ToString
-public class Notif {
+public class Notification implements Serializable {
     private String notificationMessage;
     private String notificationTitle;
-    private String receivedAt;
+    private Date receivedAt;
     private String appName;
 }

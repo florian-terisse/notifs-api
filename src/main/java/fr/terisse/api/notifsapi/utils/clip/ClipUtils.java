@@ -1,6 +1,5 @@
 package fr.terisse.api.notifsapi.utils.clip;
 
-import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import javax.sound.sampled.*;
@@ -27,8 +26,8 @@ public class ClipUtils {
 
     final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    public void play(byte @NonNull [] song) {
-        read(new ByteArrayInputStream(song));
+    public void play(byte [] song) {
+        if (song != null) read(new ByteArrayInputStream(song));
     }
 
     private void read(InputStream stream) {

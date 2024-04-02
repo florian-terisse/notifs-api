@@ -88,16 +88,18 @@ public class CalendarUtils {
     }
 
     public List<Evenement> getEvents() throws IOException {
+        Date debut = new Date();
 
         return service.events().list("9d6b192218693bccfa1cc636157a315c6c937225734e23c0e5f0bb009eabeca9@group.calendar.google.com")
                 .setMaxResults(10)
-                .setTimeMin(new DateTime(System.currentTimeMillis()))
+                .setTimeMin(new DateTime(debut))
                 .setOrderBy("startTime")
                 .setSingleEvents(true)
                 .execute()
                 .getItems()
                 .stream()
                 .map(CalendarUtils::getEvenement)
+                .filter(e -> e.getDebut().after(debut))
                 .collect(Collectors.toList());
     }
 

@@ -9,7 +9,7 @@ public class EventTimer extends Timer {
 
     private static final Set<EventTimer> events = new HashSet<>();
 
-    EventTimer(Evenement event) {
+    public EventTimer(Evenement event) {
         events.add(this);
 
         this.schedule(new EventTask(event), event.getDebut());
