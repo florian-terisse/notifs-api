@@ -15,7 +15,7 @@ public class AudioUtils {
     private LocalDateTime lastMessage;
 
     public void alerte(Evenement evenement) {
-        if (lastMessage == null || ChronoUnit.MINUTES.between(lastMessage, LocalDateTime.now()) > 0) {
+            if (lastMessage == null || ChronoUnit.MINUTES.between(lastMessage, LocalDateTime.now()) > 0) {
             ClipUtils.play(evenement.getType().getSong());
         }
 

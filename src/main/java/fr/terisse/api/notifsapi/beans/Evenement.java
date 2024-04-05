@@ -13,4 +13,6 @@ public class Evenement {
     Date fin;
     NotifTypeEnum type;
     String titre;
+    boolean supprime;
+    Date derniereModif;
 }

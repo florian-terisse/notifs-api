@@ -7,12 +7,31 @@ import java.util.*;
 
 public class EventTimer extends Timer {
 
-    private static final Set<EventTimer> events = new HashSet<>();
+    private static final Map<String, EventTimer> events = new HashMap<>();
+
+    private final Evenement leEvent;
 
     public EventTimer(Evenement event) {
-        events.add(this);
+        leEvent = event;
 
-        this.schedule(new EventTask(event), event.getDebut());
+        EventTimer curEvent = events.get(event.getId());
+
+        if (curEvent == null) {
+            events.put(event.getId(), this);
+            this.schedule(new EventTask(event), event.getDebut());
+        } else if (event.isSupprime()) {
+            curEvent.cancel();
+            events.remove(event.getId());
+        } else if(event.getDerniereModif() != null && !event.getDerniereModif().equals(curEvent.getEvent().getDerniereModif())) {
+            curEvent.cancel();
+
+            events.put(event.getId(), this);
+            this.schedule(new EventTask(event), event.getDebut());
+        }
+    }
+
+    Evenement getEvent() {
+        return leEvent;
     }
 
     private static class EventTask extends TimerTask {
@@ -26,10 +45,5 @@ public class EventTimer extends Timer {
         public void run() {
             AudioUtils.alerte(leEvent);
         }
-    }
-
-    public static void purger() {
-        events.forEach(Timer::cancel);
-        events.clear();
     }
 }

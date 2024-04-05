@@ -95,6 +95,7 @@ public class CalendarUtils {
                 .setTimeMin(new DateTime(debut))
                 .setOrderBy("startTime")
                 .setSingleEvents(true)
+                .setShowDeleted(true)
                 .execute()
                 .getItems()
                 .stream()
@@ -118,11 +119,16 @@ public class CalendarUtils {
         if (end == null) {
             end = event.getEnd().getDate();
         }
+
         lReturn.setFin(new Date(end.getValue()));
 
         lReturn.setTitre(event.getSummary());
 
         lReturn.setType(NotifTypeEnum.EVENEMENT);
+
+        lReturn.setSupprime(event.getStatus().equals("cancelled"));
+
+        lReturn.setDerniereModif(new Date(event.getUpdated().getValue()));
 
         return lReturn;
 

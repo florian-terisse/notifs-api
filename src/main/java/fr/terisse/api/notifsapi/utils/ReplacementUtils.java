@@ -22,7 +22,6 @@ public class ReplacementUtils {
         replacements.put("TERISSE", "TÉRISSE");
         replacements.put("SAP REG", "Secours à personne - Régulation -");
         replacements.put("FEU D HABITATION INDIVIDUELLE", "Feu d'habitation individuelle");
-        replacements.put("SAP REG", "Secours à personne régulé");
         replacements.put("CLUGERY VOLODIA", "Clugery Volodia");
     }
 

@@ -12,7 +12,6 @@ public class CalendarSchedulerService {
 
     @Scheduled(fixedDelay = 60000)
     public void majCalendar() throws IOException {
-        EventTimer.purger();
         CalendarUtils.getEvents().forEach(EventTimer::new);
     }
 }
