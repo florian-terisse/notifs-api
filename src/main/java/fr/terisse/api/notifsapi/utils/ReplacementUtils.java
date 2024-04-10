@@ -23,6 +23,7 @@ public class ReplacementUtils {
         replacements.put("SAP REG", "Secours à personne - Régulation -");
         replacements.put("FEU D HABITATION INDIVIDUELLE", "Feu d'habitation individuelle");
         replacements.put("CLUGERY VOLODIA", "Clugery Volodia");
+        replacements.put("ACCIDENT AVP VL AVEC INCARCERE", "Accident AVP VL avec incarcéré");
     }
 
     public String makeReplacements(String message) {
