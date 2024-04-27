@@ -15,12 +15,14 @@ java {
 
 repositories {
 	mavenCentral()
+	mavenLocal()
 }
 
 ext {
 	mapstructVersion = "1.5.5.Final"
 	lombokVersion = "1.18.32"
 	lombokMapstructBindingVersion = "0.2.0"
+	pi4jVersion = "2.4.0"
 }
 
 dependencies {
@@ -47,6 +49,12 @@ dependencies {
 	implementation 'org.apache.commons:commons-lang3:3.14.0'
 
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	implementation "com.pi4j:pi4j-core:${pi4jVersion}"
+	implementation "com.pi4j:pi4j-plugin-raspberrypi:${pi4jVersion}"
+	implementation 'io.mapsmessaging:device_library:1.0.9-SNAPSHOT'
+
+	//implementation 'io.mapsmessaging:schemas:2.1.4'
 
 }
 
