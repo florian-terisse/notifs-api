@@ -1,5 +1,6 @@
 package fr.terisse.api.notifsapi.services;
 
+import fr.terisse.api.notifsapi.beans.Bme688Values;
 import io.mapsmessaging.devices.DeviceBusManager;
 import io.mapsmessaging.devices.i2c.I2CBusManager;
 import io.mapsmessaging.devices.i2c.I2CDevice;
@@ -8,6 +9,7 @@ import io.mapsmessaging.devices.i2c.devices.sensors.bme688.BME688Sensor;
 import io.mapsmessaging.devices.sensorreadings.SensorReading;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -121,5 +123,15 @@ public class BME688SensorManager {
    */
   public float getTemperatureReading(){
     return (Float)temp.getValue().getResult();
+  }
+
+  public Bme688Values getValues() {
+    return Bme688Values.builder()
+            .date(new Date())
+            .gas(getGasReading())
+            .temperature(getTemperatureReading())
+            .pressure(getPressureReading())
+            .humidity(getHumidityReading())
+            .build();
   }
 }
