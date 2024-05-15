@@ -17,7 +17,7 @@ public class Bme688ValuesDAO {
     private Integer id;
 
     Date date;
-    Long temperature;
-    Long humidity;
-    Long pressure;
+    Double temperature;
+    Double humidity;
+    Double pressure;
 }
