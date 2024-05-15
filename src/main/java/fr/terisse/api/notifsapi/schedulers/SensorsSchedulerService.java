@@ -1,8 +1,10 @@
 package fr.terisse.api.notifsapi.schedulers;
 
+import fr.terisse.api.notifsapi.beans.Bme688Values;
 import fr.terisse.api.notifsapi.mappers.Bme688ValuesMapper;
-import fr.terisse.api.notifsapi.services.BME688SensorManager;
 import fr.terisse.api.notifsapi.services.dao.Bme688DAOService;
+import fr.terisse.api.notifsapi.utils.BME280DeviceI2C;
+import fr.terisse.api.notifsapi.utils.LCDUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +19,10 @@ public class SensorsSchedulerService {
         this.bme688ValuesMapper = bme688ValuesMapper;
     }
 
-    @Scheduled(fixedDelay = 1000)
-    public void readSensors() {
-        BME688SensorManager manager = BME688SensorManager.getInstance();
-        if(!manager.hasError()) {
-            bme688DAOService.creer(bme688ValuesMapper.toDAO(manager.getValues()));
-        }
-        else {
-            System.err.println("BME688 in error mode");
-        }
+    @Scheduled(fixedDelay = 60000)
+    public void readSensors() throws Exception {
+        Bme688Values values = BME280DeviceI2C.getMeasurements();
+        bme688DAOService.creer(bme688ValuesMapper.toDAO(values));
+        LCDUtils.affiche(values);
     }
 }

@@ -3,7 +3,6 @@ package fr.terisse.api.notifsapi.utils.google;
 import com.google.cloud.texttospeech.v1.*;
 import com.google.protobuf.ByteString;
 import lombok.experimental.UtilityClass;
-import org.apache.logging.log4j.core.config.plugins.validation.constraints.NotBlank;
 
 import java.io.IOException;
 
@@ -27,7 +26,7 @@ public class TextToSpeechUtils {
         }
     }
 
-    public byte[] toSpeech(@NotBlank String message)  {
+    public byte[] toSpeech(String message)  {
         SynthesisInput input = SynthesisInput.newBuilder().setText(message).build();
 
         // audio file type

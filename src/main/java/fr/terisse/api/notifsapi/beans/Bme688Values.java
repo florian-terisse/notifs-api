@@ -12,8 +12,7 @@ import java.util.Date;
 @ToString
 public class Bme688Values implements Serializable {
     private Date date;
-    private Float gas;
-    private Float temperature;
-    private Float humidity;
-    private Float pressure;
+    private Double temperature;
+    private Double humidity;
+    private Double pressure;
 }

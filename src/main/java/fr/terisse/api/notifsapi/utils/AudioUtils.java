@@ -11,7 +11,6 @@ import java.time.temporal.ChronoUnit;
 @UtilityClass
 public class AudioUtils {
 
-
     private LocalDateTime lastMessage;
 
     public void alerte(Evenement evenement) {
@@ -22,5 +21,9 @@ public class AudioUtils {
         ClipUtils.play(TextToSpeechUtils.toSpeech(ReplacementUtils.makeReplacements(evenement.getTitre())));
 
         lastMessage = LocalDateTime.now();
+    }
+
+    public void test() {
+        ClipUtils.play(TextToSpeechUtils.toSpeech("Test audio."));
     }
 }
