@@ -123,7 +123,6 @@ public class BME280DeviceI2C {
     public Bme688Values getMeasurements() {
         makeMesure();
 
-        getPressure();
         byte[] buff = new byte[6];
         bme280.readRegister(BMP280Declares.press_msb, buff);
         long adc_T =  (long)  ((buff[3] & 0xFF) << 12) |  (long)  ((buff[4] & 0xFF) << 4) |  (long) (0);
