@@ -3,7 +3,7 @@ package fr.terisse.api.notifsapi.schedulers;
 import fr.terisse.api.notifsapi.beans.Bme688Values;
 import fr.terisse.api.notifsapi.mappers.Bme688ValuesMapper;
 import fr.terisse.api.notifsapi.services.dao.Bme688DAOService;
-import fr.terisse.api.notifsapi.utils.BME280DeviceI2C;
+import fr.terisse.api.notifsapi.utils.bme280.BME280DeviceI2C;
 import fr.terisse.api.notifsapi.utils.LCDUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

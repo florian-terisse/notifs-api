@@ -1,4 +1,4 @@
-package fr.terisse.api.notifsapi.utils;
+package fr.terisse.api.notifsapi.utils.bme280;
 /*
  *
  *
@@ -122,6 +122,8 @@ public class BME280DeviceI2C {
      */
     public Bme688Values getMeasurements() {
         makeMesure();
+
+        getPressure();
         byte[] buff = new byte[6];
         bme280.readRegister(BMP280Declares.press_msb, buff);
         long adc_T =  (long)  ((buff[3] & 0xFF) << 12) |  (long)  ((buff[4] & 0xFF) << 4) |  (long) (0);
@@ -243,7 +245,6 @@ public class BME280DeviceI2C {
     }
 
 
-
     /**
      * The chip will be reset, forcing the POR (PowerOnReset)
      * steps to occur. Once completes the chip will be configured
@@ -252,42 +253,20 @@ public class BME280DeviceI2C {
     @SneakyThrows
     private static void resetSensor() {
 
-        bme280.writeRegister(BMP280Declares.reset, BMP280Declares.reset_cmd);
+        ResetRegister.set(bme280, ResetRegister.ResetEnum.Reset);
         // The sensor needs some time to complete POR steps
         Thread.sleep(300);
-        int id = bme280.readRegister(BMP280Declares.chipId);
-        if(id != BMP280Declares.idValueMskBME)  {
+
+        if(IdRegister.get(bme280) != IdRegister.idValueMskBME)  {
             System.exit(42);
         }
 
-        int ctlHum = bme280.readRegister(BMP280Declares.ctrl_hum);
-        ctlHum |= BMP280Declares.ctl_humSamp1;
-        byte[] humRegVal = new byte[1];
-        humRegVal[0] = (byte) ctlHum;
-        bme280.writeRegister(BMP280Declares.ctrl_hum, humRegVal, humRegVal.length);
-
-
-        // Set forced mode to leave sleep ode state and initiate measurements.
-        // At measurement completion chip returns to sleep mode
-
+        CtrlHumRegister.set(bme280, CtrlHumRegister.OsrH.Oversampling_X1);
     }
 
     @SneakyThrows
     private void makeMesure() {
-        int ctlReg = bme280.readRegister(BMP280Declares.ctrl_meas);
-        ctlReg |= BMP280Declares.ctl_forced;
-        ctlReg &= ~BMP280Declares.tempOverSampleMsk;   // mask off all temperature bits
-        ctlReg |= BMP280Declares.ctl_tempSamp1;      // Temperature oversample 1
-        ctlReg &= ~BMP280Declares.presOverSampleMsk;   // mask off all pressure bits
-        ctlReg |= BMP280Declares.ctl_pressSamp1;   //  Pressure oversample 1
-
-        byte[] regVal = new byte[1];
-        regVal[0] = (byte)(BMP280Declares.ctrl_meas);
-        byte[] ctlVal = new byte[1];
-        ctlVal[0] = (byte) ctlReg;
-
-        bme280.writeRegister(regVal, ctlVal, ctlVal.length);
-
+        CtrlMeasRegister.set(bme280, CtrlMeasRegister.Mode.ForcedMode, CtrlMeasRegister.OsrsT.Oversampling_X1, CtrlMeasRegister.OsrsP.Oversampling_X1);
         Thread.sleep(300);
     }
 
@@ -375,8 +354,7 @@ public class BME280DeviceI2C {
 
 
 
-    // register contents
-    static int idValueMskBME = 0x60;   // expected chpId value BME280
+    // register contents  // expected chpId value BME280
     static int reset_cmd = 0xB6;  // written to reset
 
     // Pertaining to 0xF3 status register
